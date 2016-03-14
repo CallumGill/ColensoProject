@@ -1,0 +1,17 @@
+extends ../node_modules/jade-bootstrap/_bootstrap
+
+head
+  title = title
+  list = list
+block body
+  +navbar(title, "dropdown_menu")
+    +nav_item("/") Home
+    +nav_item("/list", "active") All of Colenso
+    +nav_item("/search") Search
+  .container
+    h1 #{title}
+    .container
+    p| This is a full list of Colenso
+    p #{list}
+    
+
