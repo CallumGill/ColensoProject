@@ -2,16 +2,44 @@ extends ../node_modules/jade-bootstrap/_bootstrap
 
 head
   title = title
+  srch = srch
+  results = results
 block body
   +navbar(title, "dropdown_menu")
     +nav_item("/") Home
     +nav_item("/list") All of Colenso
-    +nav_item("/search", "active") Search
+    +nav_item("/search", "active") #{srch}
+    form.navbar-form.navbar-left(role='search')
+      .input-group
+        .input-group-btn
+          button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+            | Search Type 
+            span.caret
+          |         
+          ul.dropdown-menu
+            li
+              a(href='#') Text
+            |           
+            li
+              a(href='#') XQuery
+            |           
+            li
+              a(href='#') The best Search
+            |           
+        input#srch.form-control(type='text', placeholder='Search', name='srch')
+        |       
+        .input-group-btn
+          button.btn.btn-default(type='submit')
+           i.glyphicon.glyphicon-search
   .container
     h1 #{title}
+   if srch
     .container
-    +input-group("Search")
-      +input-simple("text", "textSearch", "Enter text here...")
-    +icon-btn("search")
-    
+    .panel.panel-success
+      .panel-heading
+        Search Results
+      ul.list-group
+        li.list-group-item #{results}
+          
+      
 

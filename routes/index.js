@@ -33,7 +33,11 @@ function(error, result) {
 });
 
 router.get('/search', function(req, res, next) {
-	  res.render('search', { title: 'The Colenso Project'});
+      res.render('search', { title: 'The Colenso Project', srch: req.query.srch});
 });
+
+//router.get('/search', function(req, res, next) {
+	  //res.render('search', { title: 'The Colenso Project'});
+//});
 
 module.exports = router;
