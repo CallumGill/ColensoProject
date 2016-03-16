@@ -41,6 +41,25 @@ router.get('/search', function(req, res, next) {
       res.render('search', { title: 'The Colenso Project', srch: req.query.srch});
 });
 
+router.get('/author', function(req, res, next) {
+  var author = req.query.author;
+  var input = "XQUERY declare default element namespace 'http://www.tei-c.org/ns/1.0'; " +
+      "(//title[../author/name[@type='person' and .='"+author+"']]/text())";
+  console.log("IN AUTHORS");
+  client.execute(input, function(error, result) {
+	console.log("AUTHOR");
+	console.log(author);
+	console.log(result);
+	if(error){console.error(error);}
+	else{
+	  var resultArray = result.result.toString().split("\n");
+
+	  console.log(resultArray);
+	  res.render('list', { title: 'The Colenso Project', result: resultArray });
+	}
+    });
+});
+
 //router.get('/search', function(req, res, next) {
 	  //res.render('search', { title: 'The Colenso Project'});
 //});

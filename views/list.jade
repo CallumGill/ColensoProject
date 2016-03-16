@@ -6,14 +6,14 @@ head
 block body
   +navbar(title, "dropdown_menu")
     +nav_item("/") Home
-    +nav_item("/list", "active") All of Colenso
+    +nav_item("/list", "active") Authors
     +nav_item("/search") Search
   .container
     h1 #{title}
   .container
     .panel.panel-default
       .panel-heading Authors
-      ul.list-group
+      .list-group
         each val in result
-          li.list-group-item #{val}
+          a.list-group-item(href="author?author=#{val}") #{val}
 
