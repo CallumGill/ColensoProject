@@ -2,7 +2,7 @@ extends ../node_modules/jade-bootstrap/_bootstrap
 
 head
   title = title
-  list = list
+  result = result
 block body
   +navbar(title, "dropdown_menu")
     +nav_item("/") Home
@@ -10,8 +10,10 @@ block body
     +nav_item("/search") Search
   .container
     h1 #{title}
-    .container
-    p| This is a full list of Colenso
-    p #{list}
-    
+  .container
+    .panel.panel-default
+      .panel-heading Authors
+      ul.list-group
+        each val in result
+          li.list-group-item #{val}
 

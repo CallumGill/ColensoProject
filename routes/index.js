@@ -22,14 +22,19 @@ function(error, result) {
 });
 
 router.get('/list', function(req, res, next) {
-  client.execute("LIST Colenso" ,
+  client.execute("XQUERY declare default element namespace 'http://www.tei-c.org/ns/1.0';" +
+"distinct-values (//author/name[@type='person']/text()) " ,
 function(error, result) {
+	console.log("AUTHOR");
 	if(error){console.error(error);}
 	else{
-	  res.render('list', { title: 'The Colenso Project', list: result.result });
+	  console.log(result);
+	  var resultArray = result.result.toString().split("\n");
+
+	  console.log(resultArray);
+	  res.render('list', { title: 'The Colenso Project', result: resultArray });
 	}
-		}
-		);
+    });
 });
 
 router.get('/search', function(req, res, next) {

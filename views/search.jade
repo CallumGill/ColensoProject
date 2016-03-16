@@ -8,7 +8,7 @@ block body
   +navbar(title, "dropdown_menu")
     +nav_item("/") Home
     +nav_item("/list") All of Colenso
-    +nav_item("/search", "active") #{srch}
+    +nav_item("/search", "active") Search
     form.navbar-form.navbar-left(role='search')
       .input-group
         .input-group-btn
@@ -32,7 +32,6 @@ block body
           button.btn.btn-default(type='submit')
            i.glyphicon.glyphicon-search
   .container
-    h1 #{title}
    if srch
     .container
     .panel.panel-success
@@ -40,6 +39,8 @@ block body
         Search Results
       ul.list-group
         li.list-group-item #{results}
+   else
+    p No results found
           
       
 
