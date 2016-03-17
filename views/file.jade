@@ -1,0 +1,17 @@
+extends ../node_modules/jade-bootstrap/_bootstrap
+
+head
+  title = title
+  path = path
+  file = file
+block body
+  +navbar(title, "dropdown_menu")
+    +nav_item("/") Home
+    +nav_item("/list", "active") Database
+    +nav_item("/search") Search
+  .container
+    .panel.panel-default
+      .panel-heading #{path}
+      .panel-body 
+        p !{file}
+

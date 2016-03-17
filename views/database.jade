@@ -1,0 +1,21 @@
+extends ../node_modules/jade-bootstrap/_bootstrap
+
+head
+  title = title
+  result = result
+  heading = heading
+  path = path
+block body
+  +navbar(title, "dropdown_menu")
+    +nav_item("/") Home
+    +nav_item("/list", "active") Database
+    +nav_item("/search") Search
+  .container
+    h1 #{title}
+  .container
+    .panel.panel-default
+      .panel-heading #{heading}
+      .list-group
+        each val in result
+          a.list-group-item(href="db?path=#{path}#{val}") #{val}
+
