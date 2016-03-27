@@ -16,6 +16,18 @@ function parseTextSearch(input) {
     return input;
 }
 
+function getLast(input){
+ return input[input.length-1]; 
+}
+
+function getFileNames(input) {
+  var inputArray = input.result.toString().split("\n");
+  for(var i =0; i<inputArray.length; i++){
+    inputArray[i] = getLast(inputArray[i].split("/"));
+  }
+  inputArray = inputArray.filter( onlyUnique );
+}
+
 
 client.execute("OPEN Colenso");
 /* GET home page. */
@@ -53,21 +65,24 @@ router.get('/search', function(req, res, next) {
     var type = req.query.type;
     var search = req.query.srch;
     if(!search){
-      res.render('search', { title: 'The Colenso Project'});
+      res.render('search', { title: 'The Colenso Project', test: "TEST"});
     }else if(type=='markup'){
       
     }else{
-      var parsedSearch=parseTextSearch(search);
+      var parsedSearch=search;//parseTextSearch(search);
       console.log("SEACHING FOR '"+parsedSearch+"'");
       var input = "XQUERY declare default element namespace 'http://www.tei-c.org/ns/1.0'; " +
-      "for $n in (/*["+parsedSearch+"]/text())"+
-      "return db:path($n)";
+      "for $file in collection('Colenso')"+
+      "where $file//text() contains text {'"+parsedSearch+"'}"+
+      "return db:path($file)";
       console.log("SEARCH PARSED");
       client.execute(input,function(error, result) {
 	console.log("SEARCH EXECUTED");
         console.log(result.result);
 	console.log("SEARCH RESULTS SHOWN");
-        //res.render('search', { title: 'The Colenso Project', results: });
+	var resultArray = result.result.toString().split("\n")
+	console.log(resultArray);
+        res.render('search', { title: 'The Colenso Project', results: resultArray});
       });
     }
       

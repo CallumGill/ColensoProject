@@ -13,9 +13,8 @@ block body
   .container
     h1 #{title}
   .container
-    .panel.panel-default
+    .panel.panel-default(id="main-table")
       .panel-heading #{heading}
       .list-group
         each val in result
           a.list-group-item(href="db?path=#{path}#{val}") #{val}
-

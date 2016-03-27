@@ -4,6 +4,7 @@ head
   title = title
   srch = srch
   results = results
+    
 block body
   +navbar(title, "dropdown_menu")
     +nav_item("/") Home
@@ -12,35 +13,35 @@ block body
     form.navbar-form.navbar-left(role='search')
       .input-group
         .input-group-btn
-          button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-            | Search Type 
+          button.btn.btn-default.dropdown-toggle(id="srch-type-btn", type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+            | #{test}
             span.caret
-          |         
+            |         
           ul.dropdown-menu
             li
-              a(href='#') Text
+              a(id="text-srch-btn") Text
             |           
             li
-              a(href='#') XQuery
-            |           
-            li
-              a(href='#') The best Search
-            |           
-        input#srch.form-control(type='text', placeholder='Search', name='srch')
+              a(id="xquery-srch-btn") XQuery    
+          script.
+            var srchType = "Text";
+            document.getElementById("srch-type-btn").innerHTML = srchType;
+            alert('test');
+        input#srch.form-control(type="text", placeholder='Search', name='srch')
         |       
         .input-group-btn
           button.btn.btn-default(type='submit')
            i.glyphicon.glyphicon-search
   .container
-   if srch
     .container
     .panel.panel-success
-      .panel-heading
-        Search Results
-      ul.list-group
-        li.list-group-item #{results}
-   else
-    p No results found
+      .panel-heading Search Results
+      .list-group
+        if results
+          each val in results
+           a.list-group-item(href="db?path=#{val}") #{val}
+   //else
+    //p No results found
           
       
 
