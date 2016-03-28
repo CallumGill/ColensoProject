@@ -5,6 +5,7 @@ head
   path = path
   file = file
 block body
+  
   +navbar(title, "dropdown_menu")
     +nav_item("/") Home
     +nav_item("/list", "active") Database
@@ -12,6 +13,13 @@ block body
   .container
     .panel.panel-default
       .panel-heading #{path}
-      .panel-body 
+      ul.nav.nav-tabs
+        li.active(id="text-tab", role='presentation')
+          a(href="") Text
+        li(id="xml-tab", role='presentation')
+          a(href="#xml") XML
+        li(id="edit-tab", role='presentation')
+          a(href="#edit") Edit
+      .panel-body
         p !{file}
 

@@ -6,6 +6,8 @@ head
   results = results
     
 block body
+  script.
+    srchType = "Text";
   +navbar(title, "dropdown_menu")
     +nav_item("/") Home
     +nav_item("/list") All of Colenso
@@ -13,20 +15,21 @@ block body
     form.navbar-form.navbar-left(role='search')
       .input-group
         .input-group-btn
-          button.btn.btn-default.dropdown-toggle(id="srch-type-btn", type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-            | #{test}
-            span.caret
-            |         
-          ul.dropdown-menu
-            li
-              a(id="text-srch-btn") Text
-            |           
-            li
-              a(id="xquery-srch-btn") XQuery    
+          .btn-group
+            button.btn.btn-default(type='button', id='srch-type-text') Search Type
+            button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+              span.caret
+              span.sr-only Toggle Dropdown
+            ul.dropdown-menu
+              li
+                a(onclick='setSearchType("Text")') Text
+              li
+                a(onclick='setSearchType("XQuery")') XQuery/XPath   
           script.
-            var srchType = "Text";
-            document.getElementById("srch-type-btn").innerHTML = srchType;
-            alert('test');
+            function setSearchType(type){
+              srchType = type;
+              document.getElementById("srch-type-text").innerHTML = srchType+" Search";
+            }
         input#srch.form-control(type="text", placeholder='Search', name='srch')
         |       
         .input-group-btn

@@ -17,4 +17,9 @@ block body
       .panel-heading #{heading}
       .list-group
         each val in result
-          a.list-group-item(href="db?path=#{path}#{val}") #{val}
+            a.list-group-item.clearfix(href="db?path=#{path}#{val}") #{val}
+              if val.slice(-3) == "xml"
+                span.pull-right
+                  button.btn.btn-sm.btn-success.pull-right(href="#", type='button', aria-label='Download')
+                    span.glyphicon.glyphicon-download-alt()
+          

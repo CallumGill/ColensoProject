@@ -66,8 +66,18 @@ router.get('/search', function(req, res, next) {
     var search = req.query.srch;
     if(!search){
       res.render('search', { title: 'The Colenso Project', test: "TEST"});
-    }else if(type=='markup'){
-      
+    }else if(type=='xquery'){
+      var input = "XQUERY declare default element namespace 'http://www.tei-c.org/ns/1.0'; " +
+      "for $file in " + search +
+      "return db:path($file)";
+      client.execute(input,function(error, result) {
+	console.log("SEARCH EXECUTED");
+        console.log(result.result);
+	console.log("SEARCH RESULTS SHOWN");
+	var resultArray = result.result.toString().split("\n")
+	console.log(resultArray);
+        res.render('search', { title: 'The Colenso Project', results: resultArray});
+      });
     }else{
       var parsedSearch=search;//parseTextSearch(search);
       console.log("SEACHING FOR '"+parsedSearch+"'");
