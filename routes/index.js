@@ -45,6 +45,11 @@ function(error, result) {
 		);
 });
 
+router.get('/upload/file', function(req, res, next) {
+  console.log(req.file);
+  res.render('index', {title: 'The Colenso Project', place: result.result});
+});
+
 router.get('/list', function(req, res, next) {
   client.execute("XQUERY declare default element namespace 'http://www.tei-c.org/ns/1.0';" +
 "distinct-values (//author/name[@type='person']/text()) " ,

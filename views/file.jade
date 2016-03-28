@@ -5,21 +5,31 @@ head
   path = path
   file = file
 block body
-  
+  script.
+    function save(){
+      var text = document.getElementById("text-field").value;
+    }
   +navbar(title, "dropdown_menu")
     +nav_item("/") Home
     +nav_item("/list", "active") Database
     +nav_item("/search") Search
   .container
     .panel.panel-default
-      .panel-heading #{path}
-      ul.nav.nav-tabs
-        li.active(id="text-tab", role='presentation')
-          a(href="") Text
-        li(id="xml-tab", role='presentation')
-          a(href="#xml") XML
-        li(id="edit-tab", role='presentation')
-          a(href="#edit") Edit
-      .panel-body
-        p !{file}
+      .panel-heading.clearfix #{path}
+        //span.fileinput.fileinput-new(data-provides='fileinput')
+          //span.glyphicon.glyphicon-download-alt()
+          //input(type='file')
+      +tab-list(["Text","XML","Edit"],0)
+        +tab("Text","active")
+          .panel-body
+            | !{file}
+        +tab("XML")
+          pre.panel-body
+            | #{file}
+        +tab("Edit")
+          .panel-body
+            textarea.form-control(id="text-field", rows="25") #{file}
+          .panel-body
+            button.btn.btn-success.pull-right(onClick='save()', type='button', aria-label='Download')
+              span.glyphicon.glyphicon-floppy-disk()
 

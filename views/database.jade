@@ -20,6 +20,12 @@ block body
             a.list-group-item.clearfix(href="db?path=#{path}#{val}") #{val}
               if val.slice(-3) == "xml"
                 span.pull-right
-                  button.btn.btn-sm.btn-success.pull-right(href="#", type='button', aria-label='Download')
+                  button.btn.btn-sm.btn-success.pull-right(href='/download', type='button', aria-label='Download')
                     span.glyphicon.glyphicon-download-alt()
+  .container
+    h2 Upload a file
+    form(enctype='multipart/form-data', action='/upload/file', method='post')
+      input#file(type='file')
+      button.btn.btn-default(type='submit') Submit
+    
           
