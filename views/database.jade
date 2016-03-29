@@ -8,7 +8,7 @@ head
 block body
   +navbar(title, "dropdown_menu")
     +nav_item("/") Home
-    +nav_item("/list", "active") Database
+    +nav_item("/db", "active") Database
     +nav_item("/search") Search
   .container
     h1 #{title}
@@ -17,11 +17,11 @@ block body
       .panel-heading #{heading}
       .list-group
         each val in result
-            a.list-group-item.clearfix(href="db?path=#{path}#{val}") #{val}
-              if val.slice(-3) == "xml"
-                span.pull-right
-                  button.btn.btn-sm.btn-success.pull-right(href='/download/#{path}#{val}', type='button', aria-label='Download')
-                    span.glyphicon.glyphicon-download-alt()
+          li.list-group-item.clearfix
+            a(href="db?path=#{path}#{val}") #{val}
+            if val.slice(-3) == "xml"
+              a.btn.btn-sm.btn-success.pull-right(href='/download/#{val}?path=#{path}#{val}' download='#{val}', aria-label='Download')
+                span.glyphicon.glyphicon-download-alt()
   .container
     h2 Upload a file
     form(enctype='multipart/form-data', action='/upload/file', method='post')
