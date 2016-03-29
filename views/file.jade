@@ -4,11 +4,14 @@ head
   title = title
   path = path
   file = file
+  name = name
 block body
+  -var testVar = "testName";
   script.
     function save(){
       var text = document.getElementById("text-field").value;
     }
+  
   +navbar(title, "dropdown_menu")
     +nav_item("/") Home
     +nav_item("/list", "active") Database
@@ -16,9 +19,8 @@ block body
   .container
     .panel.panel-default
       .panel-heading.clearfix #{path}
-        //span.fileinput.fileinput-new(data-provides='fileinput')
-          //span.glyphicon.glyphicon-download-alt()
-          //input(type='file')
+        a.btn.btn-success.pull-right(href="/download/#{name}?path=#{path}" download="#{name}", type="button")
+          span.glyphicon.glyphicon-download-alt()
       +tab-list(["Text","XML","Edit"],0)
         +tab("Text","active")
           .panel-body

@@ -6,8 +6,7 @@ head
   results = results
     
 block body
-  script.
-    srchType = "Text";
+  - var srchType = "Text"
   +navbar(title, "dropdown_menu")
     +nav_item("/") Home
     +nav_item("/list") All of Colenso
@@ -16,22 +15,24 @@ block body
       .input-group
         .input-group-btn
           .btn-group
-            button.btn.btn-default(type='button', id='srch-type-text') Search Type
+            button.btn.btn-default(type='button', id='srch-type-text') Text Search
             button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
               span.caret
               span.sr-only Toggle Dropdown
             ul.dropdown-menu
               li
-                a(onclick='setSearchType("Text")') Text
+                a(onclick='setSearchType("Text"); srchType="Text"') Text
               li
-                a(onclick='setSearchType("XQuery")') XQuery/XPath   
+                a(onclick='setSearchType("XQuery"); srchType="XQuery"') XQuery/XPath   
           script.
             function setSearchType(type){
               srchType = type;
               document.getElementById("srch-type-text").innerHTML = srchType+" Search";
             }
-        input#srch.form-control(type="text", placeholder='Search', name='srch')
-        |       
+        -if(false)
+          input#srch.form-control(type="text", placeholder='Search', name='srch')
+        -else
+          input#xsrch.form-control(type="text", placeholder='X-Search', name='xsrch')
         .input-group-btn
           button.btn.btn-default(type='submit')
            i.glyphicon.glyphicon-search
