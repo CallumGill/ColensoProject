@@ -9,7 +9,7 @@ block body
   +navbar(title, "dropdown_menu")
     +nav_item("/") Home
     +nav_item("/db", "active") Database
-    +nav_item("/search") Search
+    +nav_item("/search/text") Search
   .container
     h1 #{title}
   .container
@@ -24,8 +24,6 @@ block body
                 span.glyphicon.glyphicon-download-alt()
   .container
     h2 Upload a file
-    form(enctype='multipart/form-data', action='/upload/file', method='post')
-      input#file(type='file')
+    form(enctype='multipart/form-data', action='/upload?path=#{path}', method='post')
+      input#file(type='file', name='uploadedFile')
       button.btn.btn-default(type='submit') Submit
-    
-          

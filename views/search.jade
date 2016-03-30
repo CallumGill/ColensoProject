@@ -4,48 +4,40 @@ head
   title = title
   srch = srch
   results = results
+  srchType = srchType
     
 block body
-  - var srchType = "Text"
   +navbar(title, "dropdown_menu")
     +nav_item("/") Home
     +nav_item("/db") Database
-    +nav_item("/search", "active") Search
+    +nav_item("/search/text", "active") Search
+  .container.clearfix
     form.navbar-form.navbar-left(role='search')
       .input-group
         .input-group-btn
           .btn-group
-            button.btn.btn-default(type='button', id='srch-type-text') Text Search
+            button.btn.btn-default(type='button', id='srch-type-text') Search Type
             button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
               span.caret
               span.sr-only Toggle Dropdown
             ul.dropdown-menu
               li
-                a(onclick='setSearchType("Text"); srchType="Text"') Text
+                a(href='/search/text') Text
               li
-                a(onclick='setSearchType("XQuery"); srchType="XQuery"') XQuery/XPath   
-          script.
-            function setSearchType(type){
-              srchType = type;
-              document.getElementById("srch-type-text").innerHTML = srchType+" Search";
-            }
-        -if(false)
-          input#srch.form-control(type="text", placeholder='Search', name='srch')
-        -else
-          input#xsrch.form-control(type="text", placeholder='X-Search', name='xsrch')
+                a(href='/search/xquery') XQuery/XPath
+        input#srch.form-control(type="text", placeholder='Search', name='srch')
         .input-group-btn
           button.btn.btn-default(type='submit')
            i.glyphicon.glyphicon-search
   .container
-    .container
-    .panel.panel-success
-      .panel-heading Search Results
-      .list-group
-        if results
-          each val in results
-           a.list-group-item(href="db?path=#{val}") #{val}
-   //else
-    //p No results found
+    if results
+      .panel.panel-success
+        .panel-heading Search Results
+        .list-group
+          if results
+            each val in results
+             a.list-group-item(href="/db?path=#{val}") #{val}
+
           
       
 

@@ -3,6 +3,10 @@ var router = express.Router();
 var cheerio = require('cheerio');
 var basex = require('basex');
 var client = new basex.Session("127.0.0.1", 1984, "admin", "admin");
+var multer = require('multer');
+var storage = multer.memoryStorage();
+var upload = multer({storage: storage});
+router.use(upload.single('uploadedFile'));
 
 function onlyUnique(value, index, self) { 
     return self.indexOf(value) === index;
@@ -34,23 +38,8 @@ function getFileNames(input) {
 
 client.execute("OPEN Colenso");
 /* GET home page. */
-//client.execute("xquery //movie[position() lt 10]",console.log);
 router.get("/",function(req,res,next){
-client.execute("XQUERY declare default element namespace 'http://www.tei-c.org/ns/1.0';" +
-" (//name[@type='place']/text())[1] ",
-function(error, result) {
-	if(error){console.error(error);}
-	else{
-	res.render('index', {title: 'The Colenso Project', place: result.result});
-	
-	}
-		}
-		);
-});
-
-router.get('/upload/file', function(req, res, next) {
-  console.log(req.file);
-  res.render('index', {title: 'The Colenso Project', place: result.result});
+  res.render('index', { title: 'The Colenso Project'});
 });
 
 router.get('/list', function(req, res, next) {
@@ -69,6 +58,36 @@ function(error, result) {
     });
 });
 
+router.post('/upload', function(req, res, next) {
+  var file = req.file;
+  var targetLoc = req.query.path;
+  console.log("FILE PATH: " + targetLoc);
+  if(file){
+    var input = 'REPLACE '+targetLoc+file.originalname + ' "'+file.buffer.toString()+'"';
+    client.execute(input, function(error, result) {
+      if(error){console.log(error);}
+      else{
+	console.log(result);
+      }
+    });
+  }
+});
+
+router.post('/edit/*', function(req, res, next) {
+  var editedText = req.body.editField
+  var path = req.params[0];
+  console.log(editedText);
+  if(editedText){
+    var input = 'REPLACE '+path+' "'+editedText+'"';
+    client.execute(input, function(error, result) {
+      if(error){console.log(error);}
+      else{
+	console.log(result);
+      }
+    });
+  }
+});
+
 router.get('/download/:name', function(req, res, next) {
   var filepath = req.query.path;
   console.log("PATH: " + filepath);
@@ -79,41 +98,42 @@ router.get('/download/:name', function(req, res, next) {
   });
 });
 
-router.get('/search', function(req, res, next) {
+router.get('/search/:type', function(req, res, next) {
     var search = req.query.srch;
-    var xsearch = req.query.xsrch;
-    if(xsearch){
-      var input = "XQUERY declare default element namespace 'http://www.tei-c.org/ns/1.0'; " +
-      "for $file in " + xsearch +
-      "return db:path($file)";
-      client.execute(input,function(error, result) {
-	console.log("SEARCH EXECUTED");
-        console.log(result.result);
-	console.log("SEARCH RESULTS SHOWN");
-	var resultArray = result.result.toString().split("\n")
-	console.log(resultArray);
-        res.render('search', { title: 'The Colenso Project', results: resultArray});
-      });
-    }else if(search){
-      var parsedSearch=parseTextSearch(search);
-      console.log("SEACHING FOR "+parsedSearch);
-      var input = "XQUERY declare default element namespace 'http://www.tei-c.org/ns/1.0'; " +
-      "for $file in //*[. contains text "+parsedSearch+" using wildcards]"+
-      "return db:path($file)";
-      console.log("SEARCH PARSED");
-      client.execute(input,function(error, result) {
-	console.log("SEARCH EXECUTED");
-        console.log(result.result);
-	console.log("SEARCH RESULTS SHOWN");
-	var resultArray = result.result.toString().split("\n");
-	resultArray = resultArray.filter( onlyUnique );
-	console.log(resultArray);
-        res.render('search', { title: 'The Colenso Project', results: resultArray});
-      });
+    var searchType = req.params.type;
+    if(search){
+      if(searchType=='xquery'){
+	var input = "XQUERY declare default element namespace 'http://www.tei-c.org/ns/1.0'; " +
+	"for $file in " + search +
+	"return db:path($file)";
+	client.execute(input,function(error, result) {
+	  console.log("SEARCH EXECUTED");
+	  console.log(result.result);
+	  console.log("SEARCH RESULTS SHOWN");
+	  var resultArray = result.result.toString().split("\n")
+	  console.log(resultArray);
+	  res.render('search', { title: 'The Colenso Project', results: resultArray, srchType: searchType});
+	});
+      }else if(searchType=='text'){
+	var parsedSearch=parseTextSearch(search);
+	console.log("SEACHING FOR "+parsedSearch);
+	var input = "XQUERY declare default element namespace 'http://www.tei-c.org/ns/1.0'; " +
+	"for $file in //*[. contains text "+parsedSearch+" using wildcards]"+
+	"return db:path($file)";
+	console.log("SEARCH PARSED");
+	client.execute(input,function(error, result) {
+	  console.log("SEARCH EXECUTED");
+	  console.log(result.result);
+	  console.log("SEARCH RESULTS SHOWN");
+	  var resultArray = result.result.toString().split("\n");
+	  resultArray = resultArray.filter( onlyUnique );
+	  console.log(resultArray);
+	  res.render('search', { title: 'The Colenso Project', results: resultArray, srchType: searchType});
+	});
+      }
     }else{
-      res.render('search', { title: 'The Colenso Project', test: "TEST"});
+      res.render('search', { title: 'The Colenso Project', srchType: searchType});
     }
-      
 });
 
 router.get('/author', function(req, res, next) {
@@ -181,8 +201,6 @@ router.get('/db', function(req, res, next) {
   });
 });
 
-//router.get('/search', function(req, res, next) {
-	  //res.render('search', { title: 'The Colenso Project'});
-//});
+
 
 module.exports = router;

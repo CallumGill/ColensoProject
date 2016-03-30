@@ -5,17 +5,11 @@ head
   path = path
   file = file
   name = name
-block body
-  -var testVar = "testName";
-  script.
-    function save(){
-      var text = document.getElementById("text-field").value;
-    }
-  
+block body 
   +navbar(title, "dropdown_menu")
     +nav_item("/") Home
     +nav_item("/db", "active") Database
-    +nav_item("/search") Search
+    +nav_item("/search/text") Search
   .container
     .panel.panel-default
       .panel-heading.clearfix #{path}
@@ -29,9 +23,10 @@ block body
           pre.panel-body
             | #{file}
         +tab("Edit")
-          .panel-body
-            textarea.form-control(id="text-field", rows="25") #{file}
-          .panel-body
-            button.btn.btn-success.pull-right(onClick='save()', type='button', aria-label='Download')
-              span.glyphicon.glyphicon-floppy-disk()
+          form(action='edit/#{path}', method='post')
+            .panel-body
+              textarea.form-control(name="editField", rows="25") #{file}
+            .panel-body
+              button.btn.btn-success.pull-right(type='submit', aria-label='Download')
+                span.glyphicon.glyphicon-floppy-disk()
 
