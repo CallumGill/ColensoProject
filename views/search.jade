@@ -16,7 +16,7 @@ block body
       .input-group
         .input-group-btn
           .btn-group
-            button.btn.btn-default(type='button', id='srch-type-text') Search Type
+            button.btn.btn-default(type='button', id='srch-type-text') #{srchType} Search
             button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
               span.caret
               span.sr-only Toggle Dropdown
@@ -25,7 +25,7 @@ block body
                 a(href='/search/text') Text
               li
                 a(href='/search/xquery') XQuery/XPath
-        input#srch.form-control(type="text", placeholder='Search', name='srch')
+        input#srch.form-control(type="text", placeholder='#{srchType} Search', name='srch')
         .input-group-btn
           button.btn.btn-default(type='submit')
            i.glyphicon.glyphicon-search

@@ -12,15 +12,27 @@ function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
 }
 
+function replaceAll(input, search, replacement) {
+    return input.split(search).join(replacement);
+};
+
+String.prototype.splice = function(idx, rem, str) {
+    return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
+};
+
 function parseTextSearch(input) {
+
     input = "'"+input;
-    input = input.replace(" && ", "'ftand'");
-    input = input.replace(" || ", "'ftor'");
-    input = input.replace("&&", "'ftand'");
-    input = input.replace("||", "'ftor'");
-    input = input.replace(" -", "'ftnot'");
+    input = replaceAll(input, " && ", "'ftand'");
+    input = replaceAll(input," || ", "'ftor'");
+    input = replaceAll(input,"&&", "'ftand'");
+    input = replaceAll(input,"||", "'ftor'");
+    input = replaceAll(input," -", "'ftnot'");
+    input = replaceAll(input,"-", "'ftnot'");
     input += "'";
     return input;
+    
+    
 }
 
 function getLast(input){
@@ -68,6 +80,7 @@ router.post('/upload', function(req, res, next) {
       if(error){console.log(error);}
       else{
 	console.log(result);
+	res.redirect('/db?path='+targetLoc.substring(0, targetLoc.length -1));
       }
     });
   }
@@ -83,6 +96,7 @@ router.post('/edit/*', function(req, res, next) {
       if(error){console.log(error);}
       else{
 	console.log(result);
+	res.redirect('/db?path='+path);
       }
     });
   }
@@ -112,6 +126,7 @@ router.get('/search/:type', function(req, res, next) {
 	  console.log("SEARCH RESULTS SHOWN");
 	  var resultArray = result.result.toString().split("\n")
 	  console.log(resultArray);
+	  searchType = "XQuery";
 	  res.render('search', { title: 'The Colenso Project', results: resultArray, srchType: searchType});
 	});
       }else if(searchType=='text'){
@@ -128,10 +143,14 @@ router.get('/search/:type', function(req, res, next) {
 	  var resultArray = result.result.toString().split("\n");
 	  resultArray = resultArray.filter( onlyUnique );
 	  console.log(resultArray);
+	  searchType = "Text";
 	  res.render('search', { title: 'The Colenso Project', results: resultArray, srchType: searchType});
 	});
       }
     }else{
+      if(searchType=='text'){
+	searchType="Text";
+      }else if(searchType=='xquery'){searchType="XQuery";}
       res.render('search', { title: 'The Colenso Project', srchType: searchType});
     }
 });
@@ -192,7 +211,7 @@ router.get('/db', function(req, res, next) {
 	  resultArray = resultArray.filter( onlyUnique );
 	  //console.log(resultArray);
 	  if(path!=''){
-	    path += '/'
+	   path+='/';
 	  }
 	  res.render('database', { title: 'The Colenso Project', result: resultArray, heading: heading, path: path });
 	}
